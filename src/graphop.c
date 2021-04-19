@@ -80,18 +80,15 @@ bool isConnected(Graph* graph, int fromNode, int toNode) {
 /* Creates an edge between two given nodes. If it already exists,
 increments weight value */
 
-bool addEdge(Graph *graph, int fromNode, int toNode) {
+bool addEdge(Graph *graph, int fromNode, int toNode, Weight weight) {
     if(!nodeExists(graph, fromNode) || !nodeExists(graph, toNode)) {
         fprintf(stderr, "[ERROR] Cannot insert new edge: node %d or %d value(s) out of bounds\n", fromNode, toNode);
         return false;
     }
 
     if(isConnected(graph, fromNode, toNode)) {
-        graph->adjacencyList[fromNode][toNode] += 1;
-        // graph->adjacencyList[toNode][fromNode] += 1; // Uncomment to generate a digraph
-    } else {
-        graph->adjacencyList[fromNode][toNode] = 1;
-        // graph->adjacencyList[toNode][fromNode] = 1; // Uncomment to generate a digraph
+        graph->adjacencyList[fromNode][toNode] = weight;
+        // graph->adjacencyList[toNode][fromNode] = weight; // Uncomment to generate a digraph
     }
     
     fprintf(stdout, "[INSERT-EDGE] Edge inserted between %d and %d of weight %d\n", fromNode, toNode, graph->adjacencyList[fromNode][toNode]);
