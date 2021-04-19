@@ -33,7 +33,7 @@ bool print(Graph *graph) {
     for(int line = 1; line <= graph->nodesNumber; line++) {
         fprintf(stdout, "[PRINT] Node %d\nConnections: ", line);
         for(int column = 1; column <= graph->nodesNumber; column++) {
-            if(graph->adjacencyList[line][column] > 0) {
+            if(isConnected(line, column)) {
                 fprintf(stdout, "%d, ", column);
             }
         }
@@ -125,4 +125,41 @@ bool removeEdge(Graph *graph, int fromNode, int toNode) {
     fprintf(stdout, "[REMOVE-EDGE] Edge removed between %d and %d\n", fromNode, toNode);
     return true;
     
+}
+
+/* Checks if an edge has neighbors */
+
+bool noNeighbors(Graph *graph, int node) {
+    
+    if(!nodeExists(graph, node)) {
+        fprintf(stderr, "[ERROR] Cannot check if node has neighbors: value %d out of bounds\n", node)
+        return false;
+    }
+
+    for(int column = 1; column <= graph->nodesNumber; column++) {
+        if(isConnected(node, column)) {
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
+/* Returns next neighbor to a node */
+
+int nextNeighbor(Graph *graph, int node, int adjacentNode) {
+
+    if(!nodeExists(graph, node) || !nodeExists(graph, adjacentNode)) {
+        fprintf(stderr, "[ERROR] Cannot check next neighbor: node %d or %d value(s) out of bounds\n", node, adjacentNode);
+        return EMPTY_EDGE;
+    }
+
+    Weight nextAdjacent = graph->adjacencyList[node][adjacentNode + 1];
+    if(nextAdjacent == EMPTY_EDGE) {
+        fprintf(stderr, "[ERROR] Cannot check next neighbor: there's no next neighbor\n");
+        return EMPTY_EDGE;
+    }
+
+    return nextAdjacent;
 }
