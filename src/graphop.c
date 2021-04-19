@@ -152,14 +152,14 @@ int nextNeighbor(Graph *graph, int node, int adjacentNode) {
 
     if(!nodeExists(graph, node) || !nodeExists(graph, adjacentNode)) {
         fprintf(stderr, "[ERROR] Cannot check next neighbor: node %d or %d value(s) out of bounds\n", node, adjacentNode);
-        return EMPTY_EDGE;
+        return EMPTY_NODE;
     }
 
-    Weight nextAdjacent = graph->adjacencyList[node][adjacentNode + 1];
-    if(nextAdjacent == EMPTY_EDGE) {
-        fprintf(stderr, "[ERROR] Cannot check next neighbor: there's no next neighbor\n");
-        return EMPTY_EDGE;
+    for(int column = adjacentNode + 1; column <= graph->nodesNumber; column++) {
+        if(isConnected(graph, node, column)) {
+            return graph->adjacencyList[node][column];
+        }
     }
 
-    return nextAdjacent;
+    return EMPTY_NODE;
 }

@@ -2,6 +2,7 @@
 
 #define SIZE 50 + 1 /* Avoids '0' nodes value: vertices range 1 to SIZE */
 #define EMPTY_EDGE -1 /* Signs an empty edge
+#define EMPTY_NODE -1 /* Signs an empty node
 
 /* Avoids variable types replacement */
 
