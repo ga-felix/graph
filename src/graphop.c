@@ -5,16 +5,10 @@
 
 bool initialize(Graph *graph, int nodesNumber) {
 
-    if(nodesNumber > SIZE) {
-        fprintf(stderr, "[ERROR] nodes number has exceeded maximum size value of %d\n", SIZE);
+    if(!nodeExists(nodesNumber)) {
+        fprintf(stderr, "[ERROR] nodes number is invalid %d\n", nodesNumber);
         return false;
     }
-
-    if(nodesNumber <= 0 ) {
-        fprintf(stderr, "[ERROR] Invalid nodes number inputed %d\n", nodesNumber);
-        return false;
-    }
-
     graph->nodesNumber = nodesNumber; // Signs the number of nodes
     graph->edgesNumber = 0;
 
@@ -81,6 +75,7 @@ bool isConnected(Graph* graph, int fromNode, int toNode) {
 increments weight value */
 
 bool addEdge(Graph *graph, int fromNode, int toNode, Weight weight) {
+
     if(!nodeExists(graph, fromNode) || !nodeExists(graph, toNode)) {
         fprintf(stderr, "[ERROR] Cannot insert new edge: node %d or %d value(s) out of bounds\n", fromNode, toNode);
         return false;
@@ -99,7 +94,8 @@ bool addEdge(Graph *graph, int fromNode, int toNode, Weight weight) {
 /* Removes a node. Reverse logic of addNode function */ 
 
 bool removeNode(Graph *graph) {
-    if(graph->nodesNumber > 0) {
+
+    if(graph->nodesNumber == 0) {
         fprintf(stderr, "[ERROR] Cannot remove node because graph is empty\n");
         return false;
     }
