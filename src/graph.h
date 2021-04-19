@@ -2,7 +2,6 @@
 
 #define SIZE 50 + 1 /* Avoids '0' nodes value: vertices range 1 to SIZE */
 #define EMPTY_EDGE -1 /* Signs an empty edge
-#define EMPTY_NODE -1 /* Signs an empty node
 
 /* Avoids variable types replacement */
 
@@ -32,13 +31,9 @@ bool nodeExists(Graph *graph, int node);
 
 bool isConnected(Graph *graph, int fromNode, int toNode);
 
-/* Inserts a node */
-
-bool addNode(Graph *graph);
-
 /* Inserts an edge */
 
-bool addEdge(Graph *graph, int firstNode, int secondNode);
+bool addEdge(Graph *graph, int firstNode, int secondNode, Weight weight);
 
 /* Removes a node */
 
@@ -51,6 +46,14 @@ bool removeEdge(Graph *graph, int firstNode, int secondNode);
 /* Reinitializes an existent graph */
 
 bool reinitialize(Graph *graph);
+
+/* Check if a node has no neighbors */
+
+bool noNeighbors(Graph *graph, int node);
+
+/* Returns adjacent node value relative to 'adjacentNode' value */
+
+int nextNeighbor(Graph *graph, int node, int adjacentNode);
 
 /* Checks if there's a path between two nodes */
 

@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include "graph.h"
 
+#define EMPTY_NODE -1 /* Signs an empty node
+
 /* Initializes a new graph, setting all fields to empty default value */
 
 bool initialize(Graph *graph, int nodesNumber) {
 
-    if(!nodeExists(nodesNumber)) {
+    if(!nodeExists(graph, nodesNumber)) {
         fprintf(stderr, "[ERROR] nodes number is invalid %d\n", nodesNumber);
         return false;
     }
     graph->nodesNumber = nodesNumber; // Signs the number of nodes
     graph->edgesNumber = 0;
 
-    for(int line = 0; line < graph->nodesNumber; line++) { // Initialize matrix structure
-        for(int column = 0; column < graph->nodesNumber; column++) {
+    for(int line = 0; line <= graph->nodesNumber; line++) { // Initialize matrix structure
+        for(int column = 0; column <= graph->nodesNumber; column++) {
             graph->adjacencyList[line][column] = EMPTY_EDGE;
         }
     }
@@ -33,29 +35,13 @@ bool print(Graph *graph) {
     for(int line = 1; line <= graph->nodesNumber; line++) {
         fprintf(stdout, "[PRINT] Node %d\nConnections: ", line);
         for(int column = 1; column <= graph->nodesNumber; column++) {
-            if(isConnected(line, column)) {
-                fprintf(stdout, "%d, ", column);
+            if(isConnected(graph, line, column)) {
+                fprintf(stdout, "%d (weight %d), ", column, graph->adjacencyList[line][column]);
             }
         }
         fprintf(stdout, "\n");
     }
 
-    return true;
-}
-
-/* Adds a node incrementing graph nodesNumber attribute. It's a property
-of this adjancency matrix incremental model (which is simple) */
-
-bool addNode(Graph *graph) {
-
-    if(graph->nodesNumber == SIZE) {
-        fprintf(stderr, "[ERROR] Cannot insert new node: graph is full\n");
-        return false;
-    }
-
-    graph->nodesNumber += 1;
-
-    fprintf(stdout, "[INSERT-NODE] Node %d inserted\n", graph->nodesNumber);
     return true;
 }
 
@@ -81,10 +67,8 @@ bool addEdge(Graph *graph, int fromNode, int toNode, Weight weight) {
         return false;
     }
 
-    if(isConnected(graph, fromNode, toNode)) {
-        graph->adjacencyList[fromNode][toNode] = weight;
-        // graph->adjacencyList[toNode][fromNode] = weight; // Uncomment to generate a digraph
-    }
+    graph->adjacencyList[fromNode][toNode] = weight;
+    // graph->adjacencyList[toNode][fromNode] = weight; // Uncomment to generate a digraph
     
     fprintf(stdout, "[INSERT-EDGE] Edge inserted between %d and %d of weight %d\n", fromNode, toNode, graph->adjacencyList[fromNode][toNode]);
     return true;
@@ -132,34 +116,31 @@ bool removeEdge(Graph *graph, int fromNode, int toNode) {
 bool noNeighbors(Graph *graph, int node) {
     
     if(!nodeExists(graph, node)) {
-        fprintf(stderr, "[ERROR] Cannot check if node has neighbors: value %d out of bounds\n", node)
+        fprintf(stderr, "[ERROR] Cannot check if node has neighbors: value %d out of bounds\n", node);
         return false;
     }
 
     for(int column = 1; column <= graph->nodesNumber; column++) {
-        if(isConnected(node, column)) {
+        if(isConnected(graph, node, column)) {
             return false;
         }
     }
-
     return true;
-
 }
 
 /* Returns next neighbor to a node */
 
 int nextNeighbor(Graph *graph, int node, int adjacentNode) {
 
-    if(!nodeExists(graph, node) || !nodeExists(graph, adjacentNode)) {
+    if(!nodeExists(graph, node) || !nodeExists(graph, adjacentNode) && adjacentNode != 0) {
         fprintf(stderr, "[ERROR] Cannot check next neighbor: node %d or %d value(s) out of bounds\n", node, adjacentNode);
         return EMPTY_NODE;
     }
 
     for(int column = adjacentNode + 1; column <= graph->nodesNumber; column++) {
         if(isConnected(graph, node, column)) {
-            return graph->adjacencyList[node][column];
+            return column;
         }
     }
-
     return EMPTY_NODE;
 }

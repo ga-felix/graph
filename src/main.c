@@ -8,11 +8,8 @@ int main() {
     int verticeNumber = 5;
 
     initialize(&graph, verticeNumber);
-    addNode(&graph);
-    addNode(&graph);
-    addNode(&graph);
-    addEdge(&graph, 1, 8);
-    addEdge(&graph, 5, 5);
-    addEdge(&graph, 3, 2);
+    addEdge(&graph, 1, 5, 3);
+    addEdge(&graph, 3, 2, 7);
+    addEdge(&graph, 3, 5, 4);
     print(&graph);
 }
